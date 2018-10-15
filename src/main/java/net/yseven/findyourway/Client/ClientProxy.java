@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.yseven.findyourway.CommonProxy;
 import net.yseven.findyourway.FindYourWay;
 import net.yseven.findyourway.Network.PacketHandler;
@@ -82,9 +83,10 @@ public class ClientProxy extends CommonProxy {
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(FindYourWay.modId + ":" + id, "inventory"));
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onModelRegistry(ModelRegistryEvent event) {
-        ModItems.ENDER_COMPASS.addPropertyOverride(new ResourceLocation(ModItems.ENDER_COMPASS.assetTag), new AngleGetter());
+        ModItems.ENDER_COMPASS.addPropertyOverride(new ResourceLocation(ModItems.ENDER_COMPASS.assetTag), new AngleGetter(ModItems.ENDER_COMPASS));
         ModelLoader.setCustomModelResourceLocation(ModItems.ENDER_COMPASS, 0, new ModelResourceLocation("findyourway:ender_compass", "inventory"));
     }
 

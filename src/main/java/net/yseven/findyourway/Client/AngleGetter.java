@@ -10,6 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.yseven.findyourway.item.ItemCompassBase;
 import net.yseven.findyourway.item.ModItems;
 
 import javax.annotation.Nullable;
@@ -23,9 +24,13 @@ public class AngleGetter implements IItemPropertyGetter {
     private double prevWobble = 0.0D;
     @SideOnly(Side.CLIENT)
     private long prevWorldTime = 0L;
+    @SideOnly(Side.CLIENT)
+    private BlockPos blockPos;
 
-    double blockX;
-    double blockZ;
+    @SideOnly(Side.CLIENT)
+    AngleGetter(ItemCompassBase compassBase) {
+        blockPos = compassBase.getStructurePos();
+    }
 
     @Override
     @ParametersAreNonnullByDefault
@@ -66,16 +71,11 @@ public class AngleGetter implements IItemPropertyGetter {
 
     @SideOnly(Side.CLIENT)
     private double getAngle(World world, Entity entity, ItemStack stack) {
-        return Math.atan2((double) blockZ - entity.posZ, (double) blockX - entity.posX);
+        return Math.atan2((double) blockPos.getZ() - entity.posZ, (double) blockPos.getX() - entity.posX);
     }
 
     @SideOnly(Side.CLIENT)
     private double getFrameAngle(EntityItemFrame entity) {
         return (double) MathHelper.wrapDegrees(180 + (entity.facingDirection.getHorizontalIndex() * 90));
-    }
-
-    @SideOnly(Side.CLIENT)
-    private double getPosToAngle(BlockPos pos, Entity entity) {
-        return Math.atan2((double)pos.getZ() - entity.posZ, (double)pos.getX() - entity.posX);
     }
 }
