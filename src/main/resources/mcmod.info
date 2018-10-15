@@ -1,7 +1,7 @@
 [{
-  "modid": "endercompass",
-  "name": "Ender Compass",
-  "description": "Provides a compass that points to the End Portal",
+  "modid": "findyourway",
+  "name": "Find Your Way",
+  "description": "Provides compasses to structures",
   "version": "1.0.0.0-beta",
   "mcversion": "1.12.2",
   "logoFile": "assets/endercompass/textures/logo.png",

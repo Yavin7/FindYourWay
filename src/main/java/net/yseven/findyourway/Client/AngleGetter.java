@@ -29,7 +29,7 @@ public class AngleGetter implements IItemPropertyGetter {
 
     @SideOnly(Side.CLIENT)
     AngleGetter(ItemCompassBase compassBase) {
-        blockPos = compassBase.getStructurePos();
+        this.blockPos = compassBase.getStructurePos();
     }
 
     @Override
