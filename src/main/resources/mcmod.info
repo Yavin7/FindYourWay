@@ -1,0 +1,12 @@
+[{
+  "modid": "endercompass",
+  "name": "Ender Compass",
+  "description": "Provides a compass that points to the End Portal",
+  "version": "1.0.0.0-beta",
+  "mcversion": "1.12.2",
+  "logoFile": "assets/endercompass/textures/logo.png",
+  "url": "minecraftforge.net/",
+  "updateJSON": "minecraftforge.net/versions.json",
+  "authorList": ["Yavin7"],
+  "credits": ""
+}]
