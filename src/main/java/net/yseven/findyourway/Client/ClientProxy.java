@@ -18,7 +18,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.yseven.findyourway.CommonProxy;
 import net.yseven.findyourway.FindYourWay;
 import net.yseven.findyourway.Network.PacketHandler;
@@ -51,10 +50,6 @@ public class ClientProxy extends CommonProxy {
         compassBase.setStructurePos(pos);
     }
 
-    public static BlockPos getStructurePos(ItemCompassBase compassBase) {
-        return compassBase.getStructurePos();
-    }
-
     public static void resetStructurePos(ItemCompassBase compass) {
         compass.setStructurePos(null);
         compass.setStructureWorld(getWorld());
@@ -78,16 +73,23 @@ public class ClientProxy extends CommonProxy {
         super.postInit(event);
     }
 
-    @Override
-    public void registerItemRenderer(Item item, int meta, String id) {
-        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(FindYourWay.modId + ":" + id, "inventory"));
+    @Mod.EventBusSubscriber
+    public static class RegistrationHandler {
+        @SubscribeEvent
+        public static void registerModels(ModelRegistryEvent event) {
+            ModItems.registerModels();
+        }
     }
 
-    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onModelRegistry(ModelRegistryEvent event) {
-        ModItems.ENDER_COMPASS.addPropertyOverride(new ResourceLocation(ModItems.ENDER_COMPASS.assetTag), new AngleGetter(ModItems.ENDER_COMPASS));
-        ModelLoader.setCustomModelResourceLocation(ModItems.ENDER_COMPASS, 0, new ModelResourceLocation("findyourway:ender_compass", "inventory"));
+        registerModel(ModItems.ENDER_COMPASS);
+        registerModel(ModItems.VILLAGE_COMPASS);
+    }
+
+    private void registerModel(ItemCompassBase compass) {
+        compass.addPropertyOverride(new ResourceLocation(compass.assetTag), new AngleGetter(compass));
+        ModelLoader.setCustomModelResourceLocation(compass, 0, new ModelResourceLocation(FindYourWay.modId + ":" + compass.getUnlocalizedName(), "inventory"));
     }
 
     @SubscribeEvent

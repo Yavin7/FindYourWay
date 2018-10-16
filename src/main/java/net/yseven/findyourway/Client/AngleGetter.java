@@ -11,11 +11,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.yseven.findyourway.item.ItemCompassBase;
-import net.yseven.findyourway.item.ModItems;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Objects;
 
 public class AngleGetter implements IItemPropertyGetter {
     @SideOnly(Side.CLIENT)
@@ -71,7 +69,12 @@ public class AngleGetter implements IItemPropertyGetter {
 
     @SideOnly(Side.CLIENT)
     private double getAngle(World world, Entity entity, ItemStack stack) {
-        return Math.atan2((double) blockPos.getZ() - entity.posZ, (double) blockPos.getX() - entity.posX);
+        if(blockPos != null) {
+            return Math.atan2((double) blockPos.getZ() - entity.posZ, (double) blockPos.getX() - entity.posX);
+        } else {
+            return (double) 0;
+        }
+
     }
 
     @SideOnly(Side.CLIENT)

@@ -1,5 +1,6 @@
 package net.yseven.findyourway.item;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -9,6 +10,9 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.yseven.findyourway.Client.ClientProxy;
 import net.yseven.findyourway.CommonProxy;
 import net.yseven.findyourway.FindYourWay;
@@ -21,13 +25,13 @@ public class ItemCompassBase extends Item {
     private World structureWorld;
     public final String assetTag;
 
-    ItemCompassBase(String name, String structureType, CreativeTabs tab) {
-        this.setUnlocalizedName(name);
-        this.setRegistryName(name);
-        this.structureType = structureType;
-        this.setCreativeTab(tab);
-        this.setMaxStackSize(1);
-        this.assetTag = name + "_angle";
+    public ItemCompassBase(String name, String structureName) {
+        setUnlocalizedName(FindYourWay.modId + "." + name);
+        setRegistryName(name);
+        structureType = structureName;
+        setCreativeTab(CreativeTabs.TOOLS);
+        setMaxStackSize(1);
+        assetTag = name + "_angle";
         CommonProxy.compassList.add(this);
     }
 
@@ -52,7 +56,7 @@ public class ItemCompassBase extends Item {
     }
 
     public void registerItemModel() {
-        FindYourWay.proxy.registerItemRenderer(this, 0, this.getUnlocalizedName());
+        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 
     @Override

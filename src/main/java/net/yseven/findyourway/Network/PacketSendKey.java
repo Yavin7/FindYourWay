@@ -4,10 +4,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.yseven.findyourway.CommonProxy;
 import net.yseven.findyourway.item.ItemCompassBase;
 
 public class PacketSendKey implements IMessage {
@@ -15,14 +15,10 @@ public class PacketSendKey implements IMessage {
     private final ItemCompassBase compass;
 
     @Override
-    public void fromBytes(ByteBuf buf) {
-        structurePos = BlockPos.fromLong(buf.readLong());
-    }
+    public void fromBytes(ByteBuf buf) {}
 
     @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeLong(structurePos.toLong());
-    }
+    public void toBytes(ByteBuf buf) {}
 
     public PacketSendKey(ItemCompassBase compassBase) {
         compass = compassBase;
@@ -31,20 +27,22 @@ public class PacketSendKey implements IMessage {
     public static class Handler implements IMessageHandler<PacketSendKey, IMessage> {
         @Override
         public IMessage onMessage(PacketSendKey message, MessageContext ctx) {
-            FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handle(message, ctx));
-            return null;
-        }
-
-        private void handle(PacketSendKey message, MessageContext ctx) {
-            //server code
-            EntityPlayerMP player = ctx.getServerHandler().player;
-            WorldServer world = (WorldServer) player.world;
-            if (message.compass != null) {
-                message.structurePos = world.getChunkProvider().getNearestStructurePos(world, message.compass.getStructureType(), new BlockPos(player), false);
-                if (message.structurePos != null) {
-                    PacketHandler.INSTANCE.sendTo(message, player);
-                }
+            final EntityPlayerMP player = ctx.getServerHandler().player;
+            if (CommonProxy.containsCompass(player.inventory, message.compass)) {
+                final WorldServer world = (WorldServer) player.world;
+                final int compassId = CommonProxy.setCompassId(message.compass);
+                final String structureType = message.compass.getStructureType();
+                world.addScheduledTask(new Runnable() {
+                    @Override
+                    public void run() {
+                        BlockPos pos = world.getChunkProvider().getNearestStructurePos(world, structureType, new BlockPos(player), true);
+                        if (pos != null) {
+                            PacketHandler.INSTANCE.sendTo(new PacketGetKey(message.structurePos, compassId), player);
+                        }
+                    }
+                });
             }
+            return null;
         }
     }
 }

@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.yseven.findyourway.Client.ClientProxy;
+import net.yseven.findyourway.CommonProxy;
 import net.yseven.findyourway.item.ItemCompassBase;
 
 public class PacketGetKey implements IMessage, IMessageHandler<PacketGetKey, IMessage> {
@@ -14,19 +15,21 @@ public class PacketGetKey implements IMessage, IMessageHandler<PacketGetKey, IMe
 
     public PacketGetKey() {}
 
-    public PacketGetKey(BlockPos pos, ItemCompassBase compassBase) {
+    public PacketGetKey(BlockPos pos, int id) {
         structurePos = pos;
-        compass = compassBase;
+        compass = CommonProxy.getCompassId(id);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeLong(structurePos.toLong());
+        buf.writeInt(CommonProxy.setCompassId(compass));
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         structurePos = BlockPos.fromLong(buf.readLong());
+        compass = CommonProxy.getCompassId(buf.readInt());
     }
 
     @Override
