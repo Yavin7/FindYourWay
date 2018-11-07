@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GEG",
+    "EBE",
+    "GEG"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:dye",
+      "data": 4
+    },
+    "E": {
+      "item": "minecraft:diamond"
+    },
+    "B": {
+      "item": "minecraft:prismarine_crystals"
+    }
+  },
+  "result": {
+    "item": "findyourway:monument_compass"
+  }
+}

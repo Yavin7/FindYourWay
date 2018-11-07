@@ -1,8 +1,10 @@
 package net.yseven.findyourway.Client;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -10,7 +12,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.yseven.findyourway.item.ItemCompassBase;
+import net.yseven.findyourway.CommonProxy;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -25,32 +27,58 @@ public class AngleGetter implements IItemPropertyGetter {
     @SideOnly(Side.CLIENT)
     private BlockPos blockPos;
 
-    @SideOnly(Side.CLIENT)
-    AngleGetter(ItemCompassBase compassBase) {
-        this.blockPos = compassBase.getStructurePos();
-    }
-
     @Override
     @ParametersAreNonnullByDefault
     @SideOnly(Side.CLIENT)
     public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 
-        if (entityIn == null && !stack.isOnItemFrame()) return 0.0F;
-        final boolean entityExists = entityIn != null;
+        boolean isLiving = entityIn != null;
+        Entity errorChicken = new EntityChicken(Minecraft.getMinecraft().world);
 
-        final Entity entity = (Entity) (entityExists ? entityIn : stack.getItemFrame());
+        Entity entity;
+        if(isLiving) {
+            entity = entityIn;
+        } else if(stack.getItemFrame() != null) {
+            entity = stack.getItemFrame();
+        } else {
+            entity = errorChicken;
+        }
 
         if (worldIn == null) worldIn = entity.world;
 
-        double rotation = entityExists ? (double) entity.rotationYaw : getFrameAngle((EntityItemFrame) entity);
-        rotation %= 360.0D;
+        double angle;
+        setBlockPos(stack);
 
-        double adjusted = Math.PI - ((rotation - 90.0D) * 0.01745329238474369D - getAngle(worldIn, entity, stack));
+        if(blockPos != null) {
+            if (blockPos.getY() == 0) return 0.0F;
+            double entityAngle;
+            if(isLiving) {
+                entityAngle = entity.rotationYaw;
+            } else if(stack.getItemFrame() != null) {
+                entityAngle = getFrameAngle((EntityItemFrame) entity);
+            } else {
+                return 0.0F;
+            }
 
-        if (entityExists) adjusted = wobble(worldIn, adjusted);
+            entityAngle /= 360.0D;
+            entityAngle = MathHelper.positiveModulo(entityAngle, 1.0D);
+            double posAngle = getAngle(blockPos, entity);
+            posAngle /= Math.PI * 2D;
+            angle = 0.5D - (entityAngle - 0.25D - posAngle);
+        } else {
+            if(!ClientProxy.hasAngleErrrored()) {
+                System.out.println("Compass angle is random due to an unexpected error");
+                ClientProxy.AngleHasErrored();
+            }
+            angle = 0.0D;
+        }
 
-        final float f = (float) (adjusted / (Math.PI * 2D));
-        return MathHelper.positiveModulo(f,    1.0F);
+        if(isLiving) {
+            angle = wobble(worldIn, angle);
+        }
+
+
+        return MathHelper.positiveModulo((float) angle, 1.0F);
     }
 
     @SideOnly(Side.CLIENT)
@@ -68,13 +96,21 @@ public class AngleGetter implements IItemPropertyGetter {
     }
 
     @SideOnly(Side.CLIENT)
-    private double getAngle(World world, Entity entity, ItemStack stack) {
-        if(blockPos != null) {
-            return Math.atan2((double) blockPos.getZ() - entity.posZ, (double) blockPos.getX() - entity.posX);
-        } else {
-            return (double) 0;
+    private void setBlockPos(ItemStack stack) {
+        for (int i = 0; i < CommonProxy.compassList.size(); i++) {
+            if (stack.getItem().getUnlocalizedName().equals(CommonProxy.compassList.get(i).getUnlocalizedName())) {
+                blockPos = CommonProxy.compassList.get(i).getStructurePos();
+            } else {
+                if (!ClientProxy.hasAngleErrrored()) {
+                    System.out.println("unable to get blockPos from compassList in AngleGetter class");
+                }
+            }
         }
+    }
 
+    @SideOnly(Side.CLIENT)
+    private double getAngle(BlockPos pos, Entity ent) {
+        return MathHelper.atan2(pos.getZ() - ent.posZ, pos.getX() - ent.posX);
     }
 
     @SideOnly(Side.CLIENT)

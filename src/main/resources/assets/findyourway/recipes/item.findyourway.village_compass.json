@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GEG",
+    "EBE",
+    "GEG"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:redstone"
+    },
+    "E": {
+      "item": "minecraft:brick"
+    },
+    "B": {
+      "item": "minecraft:emerald"
+    }
+  },
+  "result": {
+    "item": "findyourway:village_compass"
+  }
+}

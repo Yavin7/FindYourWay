@@ -4,9 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,8 +18,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.yseven.findyourway.CommonProxy;
 import net.yseven.findyourway.FindYourWay;
-import net.yseven.findyourway.Network.PacketHandler;
-import net.yseven.findyourway.Network.PacketSendKey;
+import net.yseven.findyourway.Network.MessageHandlerOnClient;
+import net.yseven.findyourway.Network.MessageToClient;
+import net.yseven.findyourway.Network.MessageToServer;
 import net.yseven.findyourway.item.ItemCompassBase;
 import net.yseven.findyourway.item.ModItems;
 
@@ -32,28 +31,30 @@ public class ClientProxy extends CommonProxy {
     public static Minecraft getMinecraft() {
         return FMLClientHandler.instance().getClient();
     }
-
     public static WorldClient getWorld() {
         return getMinecraft().world;
     }
-
     public static EntityPlayerSP getPlayer() {
         return getMinecraft().player;
     }
+    private static boolean angleError = false;
 
-    //TO-DO fill out the following methods
-    public static boolean hasCompass(ItemCompassBase compass) {
-        return getPlayer() != null && CommonProxy.containsCompass(getPlayer().inventory, compass);
+    public static boolean hasAngleErrrored() {
+        return angleError;
     }
 
-    public static void setStructurePos(ItemCompassBase compassBase, BlockPos pos) {
-        compassBase.setStructurePos(pos);
+    public static void AngleHasErrored() {
+        angleError = true;
+    }
+
+    public static boolean hasCompass(ItemCompassBase compass) {
+        return getPlayer() != null && CommonProxy.containsCompass(getPlayer().inventory, compass);
     }
 
     public static void resetStructurePos(ItemCompassBase compass) {
         compass.setStructurePos(null);
         compass.setStructureWorld(getWorld());
-        PacketHandler.INSTANCE.sendToServer(new PacketSendKey(compass));
+        CommonProxy.simpleNetworkWrapper.sendToServer(new MessageToServer(compass));
     }
 
     //Proxy Info
@@ -61,6 +62,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
         MinecraftForge.EVENT_BUS.register(this);
+        CommonProxy.simpleNetworkWrapper.registerMessage(MessageHandlerOnClient.class, MessageToClient.class, CommonProxy.MESSAGE_TO_CLIENT_ID, Side.CLIENT);
     }
 
     @Override
@@ -73,23 +75,22 @@ public class ClientProxy extends CommonProxy {
         super.postInit(event);
     }
 
-    @Mod.EventBusSubscriber
-    public static class RegistrationHandler {
-        @SubscribeEvent
-        public static void registerModels(ModelRegistryEvent event) {
+    @SubscribeEvent
+    public static void registerModels(ModelRegistryEvent event) {
             ModItems.registerModels();
         }
-    }
 
     @SubscribeEvent
     public void onModelRegistry(ModelRegistryEvent event) {
         registerModel(ModItems.ENDER_COMPASS);
         registerModel(ModItems.VILLAGE_COMPASS);
+        registerModel(ModItems.FORTRESS_COMPASS);
+        registerModel(ModItems.MONUMENT_COMPASS);
     }
 
     private void registerModel(ItemCompassBase compass) {
-        compass.addPropertyOverride(new ResourceLocation(compass.assetTag), new AngleGetter(compass));
-        ModelLoader.setCustomModelResourceLocation(compass, 0, new ModelResourceLocation(FindYourWay.modId + ":" + compass.getUnlocalizedName(), "inventory"));
+        compass.addPropertyOverride(new ResourceLocation("angle"), new AngleGetter());
+        ModelLoader.setCustomModelResourceLocation(compass, 0, new ModelResourceLocation(FindYourWay.modId + ":" + compass.getUnlocalizedName()));
     }
 
     @SubscribeEvent

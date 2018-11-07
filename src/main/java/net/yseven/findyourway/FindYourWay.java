@@ -12,20 +12,16 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 public class FindYourWay {
     public static final String modId = "findyourway";
     public static final String name = "Find Your Way";
-    public static final String version = "1.0.0-beta";
+    public static final String version = "1.0.0";
 
     @Mod.Instance(modId)
     public static FindYourWay instance;
 
     @SidedProxy(serverSide = "net.yseven.findyourway.CommonProxy", clientSide = "net.yseven.findyourway.Client.ClientProxy")
     public static CommonProxy proxy;
-    public static SimpleNetworkWrapper network;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        System.out.println(name + " is loading!");
-        System.out.println("FIND YOUR WAY TEST LINE -------------------------------------- TEST");
-
         proxy.preInit(event);
     }
 
