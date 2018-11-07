@@ -9,3 +9,5 @@ Current compasses include:
 - Village Compass
 
 The compasses automatically point to the nearest structure for the world you are in, and always point forwards if the structure does not exist in your world. You can right-click to re-scan for new structures, such as new Villages.
+
+I give full permission for this mod to be used in ModPacks
