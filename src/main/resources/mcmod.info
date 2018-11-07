@@ -8,6 +8,6 @@
     "updateUrl": "",
     "authorList": ["Yavin7"],
     "credits": "",
-    "logoFile": "",
+    "logoFile": "logo.png",
     "dependencies": ["Forge"]
 }]
