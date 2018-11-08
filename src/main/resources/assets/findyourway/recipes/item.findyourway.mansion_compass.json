@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GEG",
+    "EBE",
+    "GEG"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:mossy_cobblestone"
+    },
+    "E": {
+      "item": "minecraft:wood"
+    },
+    "B": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "findyourway:mansion_compass"
+  }
+}
