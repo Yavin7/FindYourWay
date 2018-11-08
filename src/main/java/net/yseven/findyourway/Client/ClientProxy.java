@@ -81,19 +81,6 @@ public class ClientProxy extends CommonProxy {
         }
 
     @SubscribeEvent
-    public void onModelRegistry(ModelRegistryEvent event) {
-        registerModel(ModItems.ENDER_COMPASS);
-        registerModel(ModItems.VILLAGE_COMPASS);
-        registerModel(ModItems.FORTRESS_COMPASS);
-        registerModel(ModItems.MONUMENT_COMPASS);
-    }
-
-    private void registerModel(ItemCompassBase compass) {
-        compass.addPropertyOverride(new ResourceLocation("angle"), new AngleGetter());
-        ModelLoader.setCustomModelResourceLocation(compass, 0, new ModelResourceLocation(FindYourWay.modId + ":" + compass.getUnlocalizedName()));
-    }
-
-    @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         for(int i = 0; i < CommonProxy.compassList.size(); i++) {
             if(hasCompass(CommonProxy.compassList.get(i))) {

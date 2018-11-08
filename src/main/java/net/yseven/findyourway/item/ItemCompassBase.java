@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -16,6 +17,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.yseven.findyourway.Client.AngleGetter;
 import net.yseven.findyourway.Client.ClientProxy;
 import net.yseven.findyourway.CommonProxy;
 import net.yseven.findyourway.FindYourWay;
@@ -89,7 +91,8 @@ public class ItemCompassBase extends Item {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void registerItemModel() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+        this.addPropertyOverride(new ResourceLocation("angle"), new AngleGetter());
+        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(FindYourWay.modId + ":" + this.getUnlocalizedName(), "inventory"));
     }
 
     @Override

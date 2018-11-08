@@ -48,10 +48,7 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        event.getRegistry().register(ModItems.ENDER_COMPASS);
-        event.getRegistry().register(ModItems.VILLAGE_COMPASS);
-        event.getRegistry().register(ModItems.FORTRESS_COMPASS);
-        event.getRegistry().register(ModItems.MONUMENT_COMPASS);
+        ModItems.registerItems(event);
     }
 
     public static boolean containsCompass(IInventory inventory, ItemCompassBase compass) {
@@ -62,27 +59,5 @@ public class CommonProxy {
             }
         }
         return false;
-    }
-
-    public static int setCompassId(ItemCompassBase compass) {
-        switch (compass.getStructureType()){
-            case "Stronghold": return 1;
-            case "Village": return 2;
-            case "Fortress": return 3;
-            case "Monument": return 4;
-            default: return 0;
-        }
-    }
-
-    public static ItemCompassBase getCompassId(int id) {
-        switch (id) {
-            case 1: return ModItems.ENDER_COMPASS;
-            case 2: return ModItems.VILLAGE_COMPASS;
-            case 3: return ModItems.FORTRESS_COMPASS;
-            case 4: return ModItems.MONUMENT_COMPASS;
-            default:
-                ItemCompassBase ERROR_COMPASS = new ItemCompassBase("error", "");
-                return ERROR_COMPASS;
-        }
     }
 }
