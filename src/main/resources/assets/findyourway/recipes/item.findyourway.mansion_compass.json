@@ -10,7 +10,8 @@
       "item": "minecraft:mossy_cobblestone"
     },
     "E": {
-      "item": "minecraft:wood"
+      "item": "minecraft:log",
+      "data": 32767
     },
     "B": {
       "item": "minecraft:iron_ingot"
