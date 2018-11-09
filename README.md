@@ -7,7 +7,10 @@ Current compasses include:
 - Fortress Compass
 - Monument Compass
 - Village Compass
+- Mansion Compass
 
 The compasses automatically point to the nearest structure for the world you are in, and always point forwards if the structure does not exist in your world. You can right-click to re-scan for new structures, such as new Villages.
+
+The Structure Compass doesn't take you directly to the End Portal, only as far a Eyes of Ender will take you, so you still have to explore the Stronghold itself.
 
 I give full permission for this mod to be used in ModPacks
