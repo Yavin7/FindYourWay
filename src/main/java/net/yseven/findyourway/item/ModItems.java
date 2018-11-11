@@ -5,6 +5,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.yseven.findyourway.Config;
 import net.yseven.findyourway.FindYourWay;
 
 import static net.yseven.findyourway.FindYourWay.modId;
@@ -17,27 +18,57 @@ public class ModItems {
     public static ItemCompassBase MANSION_COMPASS;
 
     public static void init(){
-        ENDER_COMPASS = new ItemCompassBase("ender_compass", "Stronghold");
-        VILLAGE_COMPASS = new ItemCompassBase("village_compass", "Village");
-        FORTRESS_COMPASS = new ItemCompassBase("fortress_compass", "Fortress");
-        MONUMENT_COMPASS = new ItemCompassBase("monument_compass", "Monument");
-        MANSION_COMPASS = new ItemCompassBase("mansion_compass", "Mansion");
+        if(Config.useEnderCompass) {
+            ENDER_COMPASS = new ItemCompassBase("ender_compass", "Stronghold");
+        }
+        if(Config.useFortressCompass) {
+            FORTRESS_COMPASS = new ItemCompassBase("fortress_compass", "Fortress");
+        }
+        if(Config.useMansionCompass) {
+            MANSION_COMPASS = new ItemCompassBase("mansion_compass", "Mansion");
+        }
+        if(Config.useMonumentCompass) {
+            MONUMENT_COMPASS = new ItemCompassBase("monument_compass", "Monument");
+        }
+        if(Config.useVillageCompass) {
+            VILLAGE_COMPASS = new ItemCompassBase("village_compass", "Village");
+        }
     }
 
     @SideOnly(Side.CLIENT)
     public static void registerModels() {
-        ENDER_COMPASS.registerItemModel();
-        VILLAGE_COMPASS.registerItemModel();
-        FORTRESS_COMPASS.registerItemModel();
-        MONUMENT_COMPASS.registerItemModel();
-        MANSION_COMPASS.registerItemModel();
+        if(Config.useEnderCompass) {
+            ENDER_COMPASS.registerItemModel();
+        }
+        if(Config.useFortressCompass) {
+            FORTRESS_COMPASS.registerItemModel();
+        }
+        if(Config.useMansionCompass) {
+            MANSION_COMPASS.registerItemModel();
+        }
+        if(Config.useMonumentCompass) {
+            MONUMENT_COMPASS.registerItemModel();
+        }
+        if(Config.useVillageCompass) {
+            VILLAGE_COMPASS.registerItemModel();
+        }
     }
 
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        event.getRegistry().register(ENDER_COMPASS);
-        event.getRegistry().register(VILLAGE_COMPASS);
-        event.getRegistry().register(FORTRESS_COMPASS);
-        event.getRegistry().register(MONUMENT_COMPASS);
-        event.getRegistry().register(MANSION_COMPASS);
+        if(Config.useEnderCompass) {
+            event.getRegistry().register(ENDER_COMPASS);
+        }
+        if(Config.useFortressCompass) {
+            event.getRegistry().register(FORTRESS_COMPASS);
+        }
+        if(Config.useMansionCompass) {
+            event.getRegistry().register(MANSION_COMPASS);
+        }
+        if(Config.useMonumentCompass) {
+            event.getRegistry().register(MONUMENT_COMPASS);
+        }
+        if(Config.useVillageCompass) {
+            event.getRegistry().register(VILLAGE_COMPASS);
+        }
     }
 }

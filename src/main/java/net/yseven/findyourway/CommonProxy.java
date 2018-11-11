@@ -3,6 +3,7 @@ package net.yseven.findyourway;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -19,6 +20,7 @@ import net.yseven.findyourway.Network.MessageToServer;
 import net.yseven.findyourway.item.ItemCompassBase;
 import net.yseven.findyourway.item.ModItems;
 
+import java.io.File;
 import java.util.ArrayList;
 
 @Mod.EventBusSubscriber
@@ -26,11 +28,16 @@ public class CommonProxy {
 
     public static ArrayList<ItemCompassBase> compassList = new ArrayList<ItemCompassBase>();
     public static SimpleNetworkWrapper simpleNetworkWrapper;
+    public static Configuration config;
 
     public static final byte MESSAGE_TO_SERVER_ID = 71;
     public static final byte MESSAGE_TO_CLIENT_ID = 72;
 
     public void preInit(FMLPreInitializationEvent event) {
+        File directory = event.getModConfigurationDirectory();
+        config = new Configuration(new File(directory.getPath(), "findyourway.cfg"));
+        Config.readConfig();
+
         ModItems.init();
 
         simpleNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(FindYourWay.modId);
@@ -43,6 +50,9 @@ public class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
+        if(config.hasChanged()){
+            config.save();
+        }
 
     }
 
