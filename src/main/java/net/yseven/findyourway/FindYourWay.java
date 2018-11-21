@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 public class FindYourWay {
     public static final String modId = "findyourway";
     public static final String name = "Find Your Way";
-    public static final String version = "1.2.0";
+    public static final String version = "1.2.1";
 
     @Mod.Instance(modId)
     public static FindYourWay instance;
