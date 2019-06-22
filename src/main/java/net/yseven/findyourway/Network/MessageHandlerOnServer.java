@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
-import net.yseven.findyourway.CommonProxy;
+import net.yseven.findyourway.setup.ServerProxy;
 
 public class MessageHandlerOnServer implements IMessageHandler<MessageToServer, IMessage> {
     public IMessage onMessage(final MessageToServer message, MessageContext ctx) {
@@ -43,7 +43,7 @@ public class MessageHandlerOnServer implements IMessageHandler<MessageToServer, 
 
         MessageToClient msg = new MessageToClient(structurePos, message.getCompass());
         if (dimension == sendingPlayer.dimension) {
-            CommonProxy.simpleNetworkWrapper.sendTo(msg, sendingPlayer);
+            ServerProxy.simpleNetworkWrapper.sendTo(msg, sendingPlayer);
         }
     }
 }

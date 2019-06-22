@@ -1,4 +1,4 @@
-package net.yseven.findyourway;
+package net.yseven.findyourway.setup;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import net.yseven.findyourway.Config;
+import net.yseven.findyourway.FindYourWay;
 import net.yseven.findyourway.Network.MessageHandlerOnServer;
 import net.yseven.findyourway.Network.MessageHandlerOnServerDummy;
 import net.yseven.findyourway.Network.MessageToClient;
@@ -24,7 +26,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 @Mod.EventBusSubscriber
-public class CommonProxy {
+public class ServerProxy {
 
     public static ArrayList<ItemCompassBase> compassList = new ArrayList<ItemCompassBase>();
     public static SimpleNetworkWrapper simpleNetworkWrapper;

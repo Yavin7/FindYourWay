@@ -12,14 +12,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.yseven.findyourway.Client.AngleGetter;
-import net.yseven.findyourway.Client.ClientProxy;
-import net.yseven.findyourway.CommonProxy;
+import net.yseven.findyourway.setup.ClientProxy;
+import net.yseven.findyourway.setup.ServerProxy;
 import net.yseven.findyourway.FindYourWay;
 
 import javax.annotation.Nonnull;
@@ -36,8 +35,8 @@ public class ItemCompassBase extends Item {
         structureType = structureName;
         setCreativeTab(CreativeTabs.TOOLS);
         setMaxStackSize(1);
-        CommonProxy.compassList.add(this);
-        ItemCompassID = CommonProxy.compassList.indexOf(this);
+        ServerProxy.compassList.add(this);
+        ItemCompassID = ServerProxy.compassList.indexOf(this);
     }
 
     public String toString() {
@@ -74,15 +73,15 @@ public class ItemCompassBase extends Item {
     //netcode implementation
 
     public void toBytes(ByteBuf buf) {
-        if(CommonProxy.compassList.contains(this)) {
+        if(ServerProxy.compassList.contains(this)) {
             buf.writeInt(ItemCompassID);
         }
     }
 
     public static ItemCompassBase fromBytes(ByteBuf buf) {
         int ID = buf.readInt();
-        for(int i = 0; i <= CommonProxy.compassList.size(); i++) {
-            if(ID == CommonProxy.compassList.get(i).getCompassID()) return CommonProxy.compassList.get(i);
+        for(int i = 0; i <= ServerProxy.compassList.size(); i++) {
+            if(ID == ServerProxy.compassList.get(i).getCompassID()) return ServerProxy.compassList.get(i);
         }
         return null;
     }

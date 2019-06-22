@@ -12,7 +12,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.yseven.findyourway.CommonProxy;
+import net.yseven.findyourway.setup.ClientProxy;
+import net.yseven.findyourway.setup.ServerProxy;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -97,9 +98,9 @@ public class AngleGetter implements IItemPropertyGetter {
 
     @SideOnly(Side.CLIENT)
     private void setBlockPos(ItemStack stack) {
-        for (int i = 0; i < CommonProxy.compassList.size(); i++) {
-            if (stack.getItem().getUnlocalizedName().equals(CommonProxy.compassList.get(i).getUnlocalizedName())) {
-                blockPos = CommonProxy.compassList.get(i).getStructurePos();
+        for (int i = 0; i < ServerProxy.compassList.size(); i++) {
+            if (stack.getItem().getUnlocalizedName().equals(ServerProxy.compassList.get(i).getUnlocalizedName())) {
+                blockPos = ServerProxy.compassList.get(i).getStructurePos();
             } else {
                 if (!ClientProxy.hasAngleErrrored()) {
                     System.out.println("unable to get blockPos from compassList in AngleGetter class");

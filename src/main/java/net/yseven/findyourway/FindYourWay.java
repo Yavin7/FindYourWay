@@ -1,37 +1,43 @@
 package net.yseven.findyourway;
 
 
+import net.minecraft.item.Item;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.yseven.findyourway.setup.ClientProxy;
+import net.yseven.findyourway.setup.IProxy;
+import net.yseven.findyourway.setup.ModSetup;
+import net.yseven.findyourway.setup.ServerProxy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Mod(modid = FindYourWay.modId, name = FindYourWay.name, version = FindYourWay.version)
+@Mod("findyourway")
 public class FindYourWay {
-    public static final String modId = "findyourway";
-    public static final String name = "Find Your Way";
-    public static final String version = "1.2.1";
+    //TODO Fix the ServerProxy and ClientProxy and add both to the setup package
+    public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy())
 
-    @Mod.Instance(modId)
-    public static FindYourWay instance;
+    public static final Logger LOGGER = LogManager.getLogger();
 
-    @SidedProxy(serverSide = "net.yseven.findyourway.CommonProxy", clientSide = "net.yseven.findyourway.Client.ClientProxy")
-    public static CommonProxy proxy;
+    public static ModSetup setup = new ModSetup();
 
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        proxy.preInit(event);
+    public FindYourWay() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
     }
 
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
-        proxy.init(event);
+    private void setup(final FMLCommonSetupEvent event) {
+        setup.init();
+        proxy.init();
     }
 
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit(event);
+    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class RegistryEvents {
+        @SubscribeEvent
+        public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
+            Item.Properties properties = new Item.Properties().group(setup.itemGroup);
+        }
     }
 }

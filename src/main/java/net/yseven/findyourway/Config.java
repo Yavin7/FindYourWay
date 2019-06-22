@@ -1,6 +1,7 @@
 package net.yseven.findyourway;
 
 import net.minecraftforge.common.config.Configuration;
+import net.yseven.findyourway.setup.ServerProxy;
 
 public class Config {
     private static final String CATEGORY_GENERAL = "ggeneral";
@@ -12,7 +13,7 @@ public class Config {
     public static boolean useVillageCompass = true;
 
     public static void readConfig() {
-        Configuration cfg = CommonProxy.config;
+        Configuration cfg = ServerProxy.config;
         try {
             cfg.load();
             initGeneralConfig(cfg);
