@@ -1,0 +1,10 @@
+{
+  "key.categories.findyourway": "Find Your Way",
+  "item.findyourway.ender_compass": "Ender Compass",
+  "item.findyourway.village_compass": "Village Compass",
+  "item.findyourway.fortress_compass": "Fortress Compass",
+  "item.findyourway.monument_compass": "Monument Compass",
+  "item.findyourway.mansion_compass": "Mansion Compass",
+
+  "itemGroup.FindYourWay": "Find Your Way"
+}

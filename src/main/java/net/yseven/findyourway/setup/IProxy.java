@@ -1,9 +1,7 @@
 package net.yseven.findyourway.setup;
 
-import net.minecraft.world.World;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public interface IProxy {
-    void init();
-
-    World getClientWorld();
+    void init(FMLCommonSetupEvent event);
 }

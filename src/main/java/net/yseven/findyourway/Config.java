@@ -1,9 +1,7 @@
 package net.yseven.findyourway;
 
-import net.minecraftforge.common.config.Configuration;
-import net.yseven.findyourway.setup.ServerProxy;
-
 public class Config {
+    /*
     private static final String CATEGORY_GENERAL = "ggeneral";
 
     public static boolean useEnderCompass = true;
@@ -34,4 +32,6 @@ public class Config {
         useMonumentCompass = cfg.getBoolean("monumentCompass", CATEGORY_GENERAL, useEnderCompass, "Leave as true to enable Monument Compass");
         useVillageCompass = cfg.getBoolean("villageCompass", CATEGORY_GENERAL, useEnderCompass, "Leave as true to enable Village Compass");
     }
+
+     */
 }
